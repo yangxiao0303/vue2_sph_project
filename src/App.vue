@@ -1,7 +1,7 @@
 <template>
   <div>
     <Header></Header>
-    <div>路由组件</div>
+    <router-view></router-view>
     <Footer></Footer>
   </div>
 </template>
