@@ -1692,8 +1692,15 @@
 </template>
 
 <script>
+// 引入封转好的页面分类请求
+import {reqCategory} from '@/api';
 export default {
   name: "TypeNav",
+  mounted() {
+    const result  =  reqCategory().then(res=>{
+        console.log(res);
+       })
+  }
 };
 </script>
 

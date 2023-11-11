@@ -1,5 +1,10 @@
 // 引入axios
 import axios from "axios";
+// 引入 nprogress 实现请求的进度条加载
+import nprogress from "nprogress";
+import "nprogress/nprogress.css";
+// 配置加载小球的隐藏
+nprogress.configure({ showSpinner: false});
 // 创建新的axios请求
 const request = axios.create({
   baseURL: '/api',// 设置请求的基础路径
@@ -8,6 +13,8 @@ const request = axios.create({
 
 // 设置请求拦截器: 在发送请求之前触发 config 配置对象
 request.interceptors.request.use((config) => {
+  // 添加一个进度条开始
+  nprogress.start();
   // 可以携带公共参数 (token...)
   // config.headers.token = 654641321352165
   // 要返回配置对象
@@ -16,6 +23,8 @@ request.interceptors.request.use((config) => {
 
 // 响应拦截器: 在请求结束之后触发, 返回一个promise 对象
 request.interceptors.response.use((res)=>{
+  // 得到返回的数据,进度条结束
+  nprogress.done();
   // 可以用来简化服务器返回的数据
   return res.data
 
