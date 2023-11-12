@@ -54,6 +54,11 @@
 <script>
 export default {
   name: "Header",
+  data() {
+    return {
+      keyWord:'',
+    }
+  },
   methods: {
     goSearch() {
       this.$route.push({
