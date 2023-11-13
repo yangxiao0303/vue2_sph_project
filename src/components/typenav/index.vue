@@ -4,7 +4,7 @@
       <div @mouseleave="activeIndex = -1">
         <h2 class="all">全部商品分类</h2>
         <div class="sort">
-          <div class="all-sort-list2">
+          <div class="all-sort-list2" @click="goSearch">
             <div
               class="item"
               v-for="(c1, index) in categoryArr"
@@ -14,7 +14,11 @@
                 @mouseenter="handleIndex(index)"
                 :class="{ active: activeIndex === index }"
               >
-                <a href="">{{ c1.categoryName }}</a>
+                <a
+                  :data-categoryName="c1.categoryName"
+                  :data-category1Id="c1.categoryId"
+                  >{{ c1.categoryName }}</a
+                >
               </h3>
               <div class="item-list clearfix">
                 <div
@@ -24,11 +28,19 @@
                 >
                   <dl class="fore">
                     <dt>
-                      <a href="">{{ c2.categoryName }}</a>
+                      <a
+                        :data-categoryName="c2.categoryName"
+                        :data-category2Id="c2.categoryId"
+                        >{{ c2.categoryName }}</a
+                      >
                     </dt>
                     <dd>
                       <em v-for="c3 in c2.categoryChild" :key="c3.categoryId">
-                        <a href="">{{ c3.categoryName }}</a>
+                        <a
+                          :data-categoryName="c3.categoryName"
+                          :data-category3Id="c3.categoryId"
+                          >{{ c3.categoryName }}</a
+                        >
                       </em>
                     </dd>
                   </dl>
@@ -38,16 +50,16 @@
           </div>
         </div>
       </div>
-        <nav class="nav">
-          <a href="###">服装城</a>
-          <a href="###">美妆馆</a>
-          <a href="###">尚品汇超市</a>
-          <a href="###">全球购</a>
-          <a href="###">闪购</a>
-          <a href="###">团购</a>
-          <a href="###">有趣</a>
-          <a href="###">秒杀</a>
-        </nav>
+      <nav class="nav">
+        <a href="###">服装城</a>
+        <a href="###">美妆馆</a>
+        <a href="###">尚品汇超市</a>
+        <a href="###">全球购</a>
+        <a href="###">闪购</a>
+        <a href="###">团购</a>
+        <a href="###">有趣</a>
+        <a href="###">秒杀</a>
+      </nav>
     </div>
   </div>
 </template>
@@ -72,6 +84,18 @@ export default {
     handleIndex(index) {
       this.activeIndex = index;
     },
+    goSearch(event){
+      // 将自定义的属性解构出来: 使用 dataset 属性
+      // 注意: 自定义属性名在获取时,回转变为全小写
+      const {categoryname, category1id, category2id, category3id} = event.target.dataset;
+      if (categoryname && category1id){
+        this.$router.push({name: "search",query: { categoryName: categoryname, category1Id: category1id}})
+      } else if (categoryname && category2id ){
+        this.$router.push({name: "search",query: { categoryName: categoryname, category2Id: category2id}})
+      } else if (categoryname && category3id ){
+        this.$router.push({name: "search",query: { categoryName: categoryname, category3Id: category3id}})
+      }
+    }
   },
   computed: {
     ...mapState({
