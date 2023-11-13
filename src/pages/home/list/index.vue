@@ -3,28 +3,15 @@
     <div class="sortList clearfix">
       <div class="center">
         <!--banner轮播-->
-        <div class="swiper-container" id="mySwiper">
-          <div class="swiper-wrapper">
-            <div class="swiper-slide">
-              <img src="./images/banner1.jpg" />
-            </div>
-            <!-- <div class="swiper-slide">
-              <img src="./images/banner2.jpg" />
-            </div>
-            <div class="swiper-slide">
-              <img src="./images/banner3.jpg" />
-            </div>
-            <div class="swiper-slide">
-              <img src="./images/banner4.jpg" />
-            </div> -->
-          </div>
-          <!-- 如果需要分页器 -->
-          <div class="swiper-pagination"></div>
-
-          <!-- 如果需要导航按钮 -->
-          <div class="swiper-button-prev"></div>
-          <div class="swiper-button-next"></div>
-        </div>
+        <Swiper :options="swiperOptions">
+          <SwiperSlide v-for="pic in banner" :key="pic.id">
+            <img :src="pic.imgUrl" alt="">
+          </SwiperSlide>
+           <!-- 具名插槽提供左右按钮 -->
+          <div class="swiper-button-prev" slot="button-prev"></div>
+          <div class="swiper-button-next" slot="button-next"></div>
+          <div class="swiper-pagination" slot="pagination"></div>
+        </Swiper>
       </div>
       <div class="right">
         <div class="news">
@@ -100,8 +87,43 @@
 </template>
 
 <script>
+// 引入辅助函数 mapState 从 store 的 home 中获取需要的 状态和数据
+import {mapState} from "vuex"
 export default {
   name: "List",
+  // 组件挂载完成阶段
+  mounted(){
+    // 派发动作给 store 中的 home 模块
+    this.$store.dispatch('goReqBanner');
+  },
+  data() {
+    return {
+      swiperOptions: {
+        navigation: {
+          // 导航按钮
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev"
+        },
+        loop: true,
+        pagination: { // 小球
+          el: ".swiper-pagination",
+          clickable: true
+        },
+        autoplay:{
+          delay: 1500,
+          stopOnLastSlide: false,
+          disableOnInteraction: true
+        }
+      }
+    }
+  },
+  computed:{
+    // 拿到 state 中数据
+    ...mapState({
+      banner: state => state.home.banner
+    }),
+  }
+
 };
 </script>
 

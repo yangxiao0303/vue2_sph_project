@@ -95,6 +95,10 @@
 <script>
 export default {
   name: "Floor",
+  // 组件挂载阶段 发送 动作
+  mounted() {
+    this.$store.dispatch("goReqFloor")
+  },
 };
 </script>
 

@@ -21,6 +21,8 @@ import '@/assets/reset.css'
 import router from '@/router'
 // 引入配置好的状态管理仓库
 import store from '@/store'
+// 引入配置好的 mock 接口
+import '@/mock/mockServe'
 // 关闭开发模式提醒
 Vue.config.productionTip = false;
 //创建vm
