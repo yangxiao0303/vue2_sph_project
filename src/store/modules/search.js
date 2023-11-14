@@ -1,16 +1,24 @@
+// 引入封装好的api接口
+import {reqGoodsList} from '@/api'
 export default  {
   // 进行异步操作发送请求/业务逻辑
   actions: {
-    
+    async getGoods({commit,dispatch,getters,state}, payload){
+      const result = await reqGoodsList(payload);
+      commit("GETGOODS",result.data);
+    }
   },
   // 用纯函数进行状态更改
   mutations: {
-   
+   GETGOODS(state,goods){
+    state.goodsInfo = goods;
+    console.log(state.goodsInfo);
+   }
   },
   // 存储状态
   state: {
-    // 渲染回来的分类数据
-    category:[]
+    // 搜索回来的商品信息
+    goodsInfo:{}
   },
   // 计算属性
   getters: {

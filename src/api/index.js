@@ -7,3 +7,5 @@ export const reqCategory = ()=> request({url:'/product/getBaseCategoryList'});
 // home 页面 banner 和 floor 组件数据请求
 export const reqBanner = ()=> mockRequest({url:'/banner'});
 export const reqFloor = ()=> mockRequest({url:'/floor'});
+// search 页面 搜索请求的结果数据(携带数据最多为 10个 key 组成的对象)
+export const reqGoodsList = (keysObj)=> request({url:'/list',method:'POST',data:keysObj});

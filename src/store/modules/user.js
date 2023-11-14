@@ -9,8 +9,7 @@ export default {
   },
   // 存储状态
   state: {
-    // 渲染回来的分类数据
-    category:[]
+
   },
   // 计算属性
   getters: {
