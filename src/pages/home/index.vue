@@ -11,7 +11,7 @@
     <!-- 猜你喜欢 -->
     <Like />
     <!-- 楼层组件 -->
-    <Floor v-for="item in 2" :key="item" />
+    <Floor v-for="item in floor" :key="item.id" :floor="item" />
     <!-- 商标 -->
     <Brand />
   </div>
@@ -24,9 +24,21 @@ import Rank from "@/pages/home/rank";
 import Like from "@/pages/home/like";
 import Floor from "@/pages/home/floor";
 import Brand from "@/pages/home/brand";
+// 引入辅助函数 获取 state 中的数据
+import { mapState } from 'vuex';
 export default {
   name: "Home",
   components: { List, Recommend, Rank, Like, Floor, Brand },
+    // 组件挂载阶段 发送 动作
+  mounted() {
+    this.$store.dispatch("goReqFloor")
+  },
+  // 通过辅助函数 mapState 获取 floor 返回的数据
+  computed:{
+    ...mapState({
+      floor: state => state.home.floor
+    })
+  }
 };
 </script>
 
