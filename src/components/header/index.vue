@@ -36,7 +36,7 @@
             type="text"
             id="autocomplete"
             class="input-error input-xxlarge"
-            v-model="keyWord"
+            v-model="keyword"
           />
           <button
             class="sui-btn btn-xlarge btn-danger"
@@ -56,16 +56,16 @@ export default {
   name: "Header",
   data() {
     return {
-      keyWord: "",
+      keyword: "",
     };
   },
   methods: {
     goSearch() {
       // 声明一个变量存储 push 方法的配置项
-      const loactions = {
+      const locations = {
         path: "/search",
         query: {
-          keyWord: this.keyWord || undefined,
+          keyword: this.keyword || undefined,
         },
       };
       // 如果在点击时路径上带有query参数,则要一并携带

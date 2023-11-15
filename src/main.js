@@ -27,5 +27,10 @@ Vue.config.productionTip = false;
 new Vue({
   render: h => h(App),
   router,
-  store
+  store,
+  // 在组件创建之前: 子组件还没创建
+  beforeCreate() {
+    // Vue.prototype上绑的属性和方法所有的vc都可以用
+    Vue.prototype.$bus = this;
+  }
 }).$mount('#app')

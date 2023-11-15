@@ -10,16 +10,32 @@
               <a href="#">全部结果</a>
             </li>
           </ul>
+          <!-- crumbs -->
           <ul class="fl sui-tag">
-            <li class="with-x">手机</li>
-            <li class="with-x">iphone<i>×</i></li>
-            <li class="with-x">华为<i>×</i></li>
-            <li class="with-x">OPPO<i>×</i></li>
+            <!-- typeNav category crumbs -->
+            <li class="with-x" v-show="searchParams.categoryName">
+              {{ searchParams.categoryName }}<i @click="removeCategory">×</i>
+            </li>
+            <!-- keyword category crumbs -->
+            <li class="with-x" v-show="searchParams.keyword">
+              {{ searchParams.keyword }}
+              <i @click="removeKeyword">×</i>
+            </li>
+            <!-- brand related crumbs -->
+            <li class="with-x" v-show="searchParams.trademark">
+              {{ searchParams.trademark.split(":")[1] }}
+              <i @click="removeTrademark">×</i>
+            </li>
+            <!-- attributes crumbs -->
+            <li class="with-x" v-for="(item,index) in searchParams.props" :key ="index">
+              {{ item.split(":")[1] }}
+              <i @click="removeProps(index)">×</i>
+            </li>
           </ul>
         </div>
 
         <!--selector-->
-        <SearchSelector />
+        <SearchSelector @getTradeMark="getTradeMark" @getAttr="getAttr" />
 
         <!--details-->
         <div class="details clearfix">
@@ -152,6 +168,56 @@ export default {
     getGoods() {
       this.$store.dispatch("getGoods", this.searchParams);
     },
+    // 删除分类面包屑的回调
+    removeCategory() {
+      // 分类的搜索条件清空: 设置为undifined则可让发请求的时候不会携带
+      this.searchParams.category1Id = undefined;
+      this.searchParams.category2Id = undefined;
+      this.searchParams.category3Id = undefined;
+      this.searchParams.categoryName = undefined;
+      // 路由跳转:要把分类query参数删除,但是如果有params,要继续携带
+      this.$router.push({ name: "search", params: this.$route.params });
+    },
+    // 删除搜索关键字的回调
+    removeKeyword() {
+      // 关键词搜索条件清空
+      this.searchParams.keyword = undefined;
+      // 路由跳转
+      this.$route.push({ name: "search", query: this.$route.query });
+
+      // 同时通知兄弟组件 Header 清除搜索框内关键字: 兄弟组件传参,使用事件总线
+      // 参1,事件名称(类型); 参2,传递参数
+      this.$bus.$emit("clear");
+    },
+    // 给子组件的自定义事件的回调(获取 trademark)
+    getTradeMark(trademark) {
+      this.searchParams.trademark = `${trademark.tmId}:${trademark.tmName}`;
+      // 发请求数据
+      this.getGoods();
+    },
+    // 给自组建的自定义事件的回调(获取 attributes)
+    getAttr(props) {
+      // 如果传过来的已经有了,直接结束
+      if (this.searchParams.props.includes(props)) return;
+      // 没有的话
+      else this.searchParams.props.push(props);
+      // 发请求数据
+      this.getGoods();
+    },
+    // 清除品牌面包屑
+    removeTrademark() {
+      // 清空品牌搜索条件
+      // 此项不呢设置成为 undefined, 因为上面的写法,会报错
+      this.searchParams.trademark = "";
+      // 再次发送请求数据
+      this.getGoods();
+    },
+// 清除平台属性面包屑
+removeProps(index){
+  // 清空平台属性的搜索条件
+  this.searchParams.props.splice(index,1);
+  this.getGoods();
+}
   },
   watch: {
     $route() {

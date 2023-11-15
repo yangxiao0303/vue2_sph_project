@@ -4,7 +4,11 @@
       <div class="fl key brand">品牌</div>
       <div class="value logos">
         <ul class="logo-list">
-          <li v-for="trademark in trademarkList" :key="trademark.tmId">
+          <li
+            v-for="trademark in trademarkList"
+            :key="trademark.tmId"
+            @click="handlerTrademark(trademark)"
+          >
             {{ trademark.tmName }}
           </li>
         </ul>
@@ -14,11 +18,13 @@
         <a href="javascript:void(0);">更多</a>
       </div>
     </div>
-    <div class="type-wrap" v-for="attr in attrsList" :key="attr.attrId">
+    <!-- 平台属性名 -->
+    <div class="type-wrap" v-for="attr in attrsList" :key="attr.attrId" >
       <div class="fl key">{{ attr.attrName }}</div>
       <div class="fl value">
         <ul class="type-list">
-          <li v-for="(attrValue, index) in attr.attrValueList" :key="index">
+          <!-- 平台属性值 -->
+          <li v-for="(attrValue, index) in attr.attrValueList" :key="index" @click="handlerAttrs(attr, attrValue)">
             <a>{{ attrValue }}</a>
           </li>
         </ul>
@@ -32,6 +38,20 @@
 import { mapState } from "vuex";
 export default {
   name: "SearchSelector",
+  methods: {
+    // 点击品牌的回调
+    handlerTrademark(trademark) {
+      // 触发父组件传入的 自定义事件->给父组件传 trademark
+      this.$emit("getTradeMark",trademark);
+    },
+    // 点击平台属性
+    handlerAttrs(attr,attrValue){
+      // 预处理平台属性,使其符合接口数据类型要求
+      const props = `${attr.attrId}:${attrValue}:${attr.attrName}`
+      // 触发父组件传入的 自定义事件 -> 给父组建传 
+      this.$emit("getAttr",props);
+    }
+  },
   computed: {
     ...mapState({
       trademarkList: (state) => state.search.goodsInfo.trademarkList,

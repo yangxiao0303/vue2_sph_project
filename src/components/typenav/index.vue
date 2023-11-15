@@ -118,6 +118,7 @@ export default {
         if (this.$route.params.keyword) {
           locations.params = this.$route.params;
         }
+        this.$router.push(locations);
       }
       // if (categoryname && category1id) {
       //   this.$router.push({

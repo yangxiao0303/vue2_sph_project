@@ -18,12 +18,12 @@ const push = VueRouter.prototype.push;
 const replace = VueRouter.prototype.replace;
 
 // 自定义方法
-VueRouter.prototype.push = function(loaction){
+VueRouter.prototype.push = function(location){
   // apply的第一个参数为修改的指向
-  push.apply(this,[loaction, ()=>{}, ()=>{}]);
+  push.apply(this,[location, ()=>{}, ()=>{}]);
 };
 
-VueRouter.prototype.replace = function(loaction){
+VueRouter.prototype.replace = function(location){
   // call的第一个参数为修该过后的指向
   replace.push(this,()=>{},()=>{});
 }
