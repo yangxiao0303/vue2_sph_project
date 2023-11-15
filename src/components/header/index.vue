@@ -56,17 +56,24 @@ export default {
   name: "Header",
   data() {
     return {
-      keyWord:'',
-    }
+      keyWord: "",
+    };
   },
   methods: {
     goSearch() {
-      this.$route.push({
+      // 声明一个变量存储 push 方法的配置项
+      const loactions = {
         path: "/search",
         query: {
           keyWord: this.keyWord || undefined,
         },
-      });
+      };
+      // 如果在点击时路径上带有query参数,则要一并携带
+      if (this.$route.query.categoryName) {
+        locations.query = this.$route.query;
+      }
+      // 路径跳转
+      this.$router.push(locations);
     },
   },
 };

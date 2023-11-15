@@ -98,33 +98,55 @@ export default {
       // 注意: 自定义属性名在获取时,会转变为全小写
       const { categoryname, category1id, category2id, category3id } =
         event.target.dataset;
-      if (categoryname && category1id) {
-        this.$router.push({
+      // 如果有 categorname
+      if (categoryname) {
+        const locations = {
           name: "search",
-          query: { categoryName: categoryname, category1Id: category1id },
-        });
-      } else if (categoryname && category2id) {
-        this.$router.push({
-          name: "search",
-          query: { categoryName: categoryname, category2Id: category2id },
-        });
-      } else if (categoryname && category3id) {
-        this.$router.push({
-          name: "search",
-          query: { categoryName: categoryname, category3Id: category3id },
-        });
+          query: { categoryName: categoryname },
+        };
+        //一级分类
+        if (category1id) {
+          locations.query.category1Id = category1id;
+          //二级分类
+        } else if (category2id) {
+          locations.query.category2Id = category2id;
+          //三级分类
+        } else {
+          locations.query.category3Id = category3id;
+        }
+        // 如果点击分类的时候 有 params 参数需要携带
+        if (this.$route.params.keyword) {
+          locations.params = this.$route.params;
+        }
       }
+      // if (categoryname && category1id) {
+      //   this.$router.push({
+      //     name: "search",
+      //     query: { categoryName: categoryname, category1Id: category1id },
+      //   });
+      // } else if (categoryname && category2id) {
+      //   this.$router.push({
+      //     name: "search",
+      //     query: { categoryName: categoryname, category2Id: category2id },
+      //   });
+      // } else if (categoryname && category3id) {
+      //   this.$router.push({
+      //     name: "search",
+      //     query: { categoryName: categoryname, category3Id: category3id },
+      //   });
+      // }
     },
     // 鼠标移入显示导航栏
-    changeShow(){
+    changeShow() {
       this.isShow = true;
     },
-    leaveHandler(){
+    // 鼠标移除导航栏
+    leaveHandler() {
       // 取消一级菜单高亮
       this.activeIndex = -1;
       // 隐藏导航栏
       this.isShow = this.$route.path === "/home";
-    }
+    },
   },
   computed: {
     ...mapState({
@@ -257,20 +279,20 @@ export default {
       }
     }
   }
-}
-/* 过度动画效果 */
-.fade-enter{
-  opacity: 0;
-  height: 0px;
-}
 
-.fade-enter-active {
-  transition: all .5s;
-}
+  /* 过度动画效果 */
+  .fade-enter {
+    opacity: 0;
+    height: 0px;
+  }
 
-.fade-enter-to{
-  opacity: 1;
-  height: 461px;
-}
+  .fade-enter-active {
+    transition: all 0.5s;
+  }
 
+  .fade-enter-to {
+    opacity: 1;
+    height: 461px;
+  }
+}
 </style>

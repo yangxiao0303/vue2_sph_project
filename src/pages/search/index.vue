@@ -49,11 +49,7 @@
           </div>
           <div class="goods-list">
             <ul class="yui3-g">
-              <li
-                class="yui3-u-1-5"
-                v-for="goods in goodsList"
-                :key="goods.id"
-              >
+              <li class="yui3-u-1-5" v-for="goods in goodsList" :key="goods.id">
                 <div class="list-wrap">
                   <div class="p-img">
                     <a href="item.html" target="_blank"
@@ -107,6 +103,36 @@ import { mapState } from "vuex";
 import SearchSelector from "./SearchSelector/SearchSelector";
 export default {
   name: "Search",
+  data() {
+    return {
+      // 商品分类搜索 的配置项 --- 对象
+      searchParams: {
+        category1Id: "",
+        category2Id: "",
+        category3Id: "",
+        categoryName: "",
+        keyword: "",
+        props: [],
+        trademark: "",
+        order: "1:desc", //排序
+        pageNo: 1, //页码
+        pageSize: 10, //每一页的条数
+      },
+    };
+  },
+  // 在组件挂在之前
+  beforeMount(){
+    //在发请求之前收集搜索的条件[分类:query参数]
+      // this.searchParams.categoryName = this.$route.query.categoryName;
+      // this.searchParams.category1Id = this.$route.query.category1Id;
+      // this.searchParams.category2Id = this.$route.query.category2Id;
+      // this.searchParams.category3Id = this.$route.query.category3Id;
+      // //在发请求之前收集关键字的条件[关键字:params参数]
+      // this.searchParams.keyword = this.$route.params.keyword;
+      //收集分类(query)与关键字(params)搜索的条件
+      // 将后面两个对象的属性值合并到第一个参数上
+      Object.assign(this.searchParams,this.$route.query,this.$route.params);
+  },
   // 在组件挂载完成阶段
   mounted() {
     // 给派发动作
@@ -121,6 +147,12 @@ export default {
       goodsList: (state) => state.search.goodsInfo.goodsList,
     }),
   },
+  methods: {
+    // 获取搜索商品的数据
+    getGoods(){
+      this.$store.dispatch("getGoods",this.searchParams);
+    }
+  }
 };
 </script>
 
