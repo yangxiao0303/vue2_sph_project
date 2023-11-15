@@ -121,17 +121,17 @@ export default {
     };
   },
   // 在组件挂在之前
-  beforeMount(){
+  beforeMount() {
     //在发请求之前收集搜索的条件[分类:query参数]
-      // this.searchParams.categoryName = this.$route.query.categoryName;
-      // this.searchParams.category1Id = this.$route.query.category1Id;
-      // this.searchParams.category2Id = this.$route.query.category2Id;
-      // this.searchParams.category3Id = this.$route.query.category3Id;
-      // //在发请求之前收集关键字的条件[关键字:params参数]
-      // this.searchParams.keyword = this.$route.params.keyword;
-      //收集分类(query)与关键字(params)搜索的条件
-      // 将后面两个对象的属性值合并到第一个参数上
-      Object.assign(this.searchParams,this.$route.query,this.$route.params);
+    // this.searchParams.categoryName = this.$route.query.categoryName;
+    // this.searchParams.category1Id = this.$route.query.category1Id;
+    // this.searchParams.category2Id = this.$route.query.category2Id;
+    // this.searchParams.category3Id = this.$route.query.category3Id;
+    // //在发请求之前收集关键字的条件[关键字:params参数]
+    // this.searchParams.keyword = this.$route.params.keyword;
+    //收集分类(query)与关键字(params)搜索的条件
+    // 将后面两个对象的属性值合并到第一个参数上
+    Object.assign(this.searchParams, this.$route.query, this.$route.params);
   },
   // 在组件挂载完成阶段
   mounted() {
@@ -148,11 +148,19 @@ export default {
     }),
   },
   methods: {
-    // 获取搜索商品的数据
-    getGoods(){
-      this.$store.dispatch("getGoods",this.searchParams);
-    }
-  }
+    // 获取搜索商品的数据 (只在组件挂载完成阶段执行一次)
+    getGoods() {
+      this.$store.dispatch("getGoods", this.searchParams);
+    },
+  },
+  watch: {
+    $route() {
+      // 路径发生变化, 表明又要搜索一次,再次收集搜索配置内容
+      Object.assign(this.searchParams, this.$route.query, this.$route.params);
+      // 并且发送请求
+      this.getGoods();
+    },
+  },
 };
 </script>
 
