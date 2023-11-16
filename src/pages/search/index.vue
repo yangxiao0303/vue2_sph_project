@@ -27,7 +27,11 @@
               <i @click="removeTrademark">×</i>
             </li>
             <!-- attributes crumbs -->
-            <li class="with-x" v-for="(item,index) in searchParams.props" :key ="index">
+            <li
+              class="with-x"
+              v-for="(item, index) in searchParams.props"
+              :key="index"
+            >
               {{ item.split(":")[1] }}
               <i @click="removeProps(index)">×</i>
             </li>
@@ -42,23 +46,29 @@
           <div class="sui-navbar">
             <div class="navbar-inner filter">
               <ul class="sui-nav">
-                <li class="active">
-                  <a href="#">综合</a>
+                <li :class="{ active: isOne }" @click="sortHandler('1')">
+                  <a
+                    >综合<span
+                      v-show="isOne"
+                      class="iconfont"
+                      :class="{
+                        'icon-jiantou_xiangxia': isDesc,
+                        'icon-jiantou_xiangshang': !isDesc,
+                      }"
+                    ></span
+                  ></a>
                 </li>
-                <li>
-                  <a href="#">销量</a>
-                </li>
-                <li>
-                  <a href="#">新品</a>
-                </li>
-                <li>
-                  <a href="#">评价</a>
-                </li>
-                <li>
-                  <a href="#">价格⬆</a>
-                </li>
-                <li>
-                  <a href="#">价格⬇</a>
+                <li :class="{ active: isTwo }" @click="sortHandler('2')">
+                  <a
+                    >价格<span
+                      v-show="!isOne"
+                      class="iconfont"
+                      :class="{
+                        'icon-jiantou_xiangxia': isDesc,
+                        'icon-jiantou_xiangshang': !isDesc,
+                      }"
+                    ></span
+                  ></a>
                 </li>
               </ul>
             </div>
@@ -162,6 +172,15 @@ export default {
     ...mapState({
       goodsList: (state) => state.search.goodsInfo.goodsList,
     }),
+    isOne() {
+      return this.searchParams.order.includes("1");
+    },
+    isTwo() {
+      return this.searchParams.order.includes("2");
+    },
+    isDesc() {
+      return this.searchParams.order.includes("desc");
+    },
   },
   methods: {
     // 获取搜索商品的数据 (只在组件挂载完成阶段执行一次)
@@ -212,12 +231,31 @@ export default {
       // 再次发送请求数据
       this.getGoods();
     },
-// 清除平台属性面包屑
-removeProps(index){
-  // 清空平台属性的搜索条件
-  this.searchParams.props.splice(index,1);
-  this.getGoods();
-}
+    // 清除平台属性面包屑
+    removeProps(index) {
+      // 清空平台属性的搜索条件
+      this.searchParams.props.splice(index, 1);
+      this.getGoods();
+    },
+    // 排序的回调
+    sortHandler(type) {
+      // 让一个值储存order的值
+      let order = this.searchParams.order;
+      // 首先判断点击之前是否高亮
+      if (order.includes(type)) {
+        // 高亮只改变箭头
+        order.includes("desc")
+          ? (order = `${type}:asc`)
+          : (order = `${type}:desc`);
+      } else {
+        // 如没高亮,变高亮并带向下箭头
+        type === "1" ? (order = "1:desc") : (order = "2:desc");
+      }
+      // 赋值回 searchParams
+      this.searchParams.order = order;
+      // 发送请求
+      this.getGoods();
+    },
   },
   watch: {
     $route() {

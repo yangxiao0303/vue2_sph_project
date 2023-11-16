@@ -12,7 +12,6 @@ export default  {
   mutations: {
    GETGOODS(state,goods){
     state.goodsInfo = goods;
-    console.log(state.goodsInfo);
    }
   },
   // 存储状态
