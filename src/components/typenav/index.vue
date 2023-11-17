@@ -75,8 +75,6 @@ export default {
   name: "TypeNav",
   // 组件挂在完毕
   mounted() {
-    // 通知vuex发送请求
-    this.$store.dispatch("goReqCategory");
     // 通过路径判断是否要展示导航栏
     this.isShow = this.$route.path == "/home";
   },
