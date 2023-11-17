@@ -1,6 +1,8 @@
 <template>
   <div>
-<Pagination :total="300" :pageSize="10" :pageNo="7" :pager="5"></Pagination>
+    <Header></Header>
+    <router-view></router-view>
+    <Footer v-show="$route.meta.isActive"></Footer>
   </div>
 </template>
 

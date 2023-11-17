@@ -1,19 +1,31 @@
 <template>
   <div class="pagination">
-    {{ startAndEndNumber }}
-    <button>上一页</button>
-    <button>1</button>
-    <button>···</button>
+    <button @click="$emit('currentChange', pageNo - 1)" :disabled="pageNo == 1">
+      上一页
+    </button>
+    <button @click="$emit('currentChange', 1)" v-show="pageNo >1">1</button>
+    <button v-show="startAndEndNumber.start > 2">···</button>
+    <!-- 中间显示的页码 -->
+    <button
+      @click="$emit('currentChange', page)"
+      v-for="(page, index) in startAndEndNumber.end"
+      :key="index" v-if="page >= startAndEndNumber.start"
+    >
+      {{ page }}
+    </button>
+    <button v-show="totalPage - startAndEndNumber.end > 1">···</button>
+    <button @click="$emit('currentChange', totalPage)">{{ totalPage }}</button>
+    <button
+      @click="$emit('currentChange', pageNo + 1)"
+      :disabled="pageNo == totalPage"
+    >
+      下一页
+    </button>
 
-    <button>3</button>
-    <button>4</button>
-    <button>5</button>
-    <button>6</button>
-    <button>7</button>
-
-    <button>···</button>
-    <button>{{ totalPage }}</button>
-    <button>下一页</button>
+    <!-- 每一页展示数据条数 -->
+      <select v-model="pageSizes" @change="$emit('getPageSizes',pageSizes)">
+        <option v-for="item in pagerCount" :value="item">{{item}}条/页</option>
+      </select>
 
     <button style="margin-left: 30px">共 {{ total }} 条</button>
   </div>
@@ -22,7 +34,12 @@
 <script>
 export default {
   name: "Pagination",
-  props: ["total", "pageSize", "pageNo", "pager"],
+  data() {
+      return {
+         pageSizes:10
+      }
+    },
+  props: ["total", "pageSize", "pageNo", "pager", "pagerCount"],
   computed: {
     totalPage() {
       return Math.ceil(this.total / this.pageSize);
@@ -53,7 +70,7 @@ export default {
           start = totalPage - pager + 1;
         }
       }
-      return {start, end};
+      return { start, end };
     },
   },
 };

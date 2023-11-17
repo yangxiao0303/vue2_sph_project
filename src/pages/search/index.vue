@@ -58,7 +58,7 @@
                     ></span
                   ></a>
                 </li>
-                <li :class="{ active: isTwo }" @click="sortHandler('2')">
+                <li :class="{ active: !isOne }" @click="sortHandler('2')">
                   <a
                     >价格<span
                       v-show="!isOne"
@@ -115,7 +115,15 @@
             </ul>
           </div>
           <div class="fr page">
-            <Pagination>
+            <Pagination
+              @getPageSizes="getPageSizes"
+              @currentChange="currentChange"
+              :total="total"
+              :pageSize="searchParams.pageSize"
+              :pageNo="searchParams.pageNo"
+              :pager="5"
+              :pagerCount="[10, 20, 30, 40, 50]"
+            >
             </Pagination>
           </div>
         </div>
@@ -172,6 +180,7 @@ export default {
   computed: {
     ...mapState({
       goodsList: (state) => state.search.goodsInfo.goodsList,
+      total: (state) => state.search.goodsInfo.total,
     }),
     isOne() {
       return this.searchParams.order.includes("1");
@@ -252,6 +261,21 @@ export default {
       // 赋值回 searchParams
       this.searchParams.order = order;
       // 发送请求
+      this.getGoods();
+    },
+    // pagination 自定义事件(获取 修改后页码)
+    currentChange(page) {
+      // 修改请求参数
+      this.searchParams.pageNo = page;
+      // 发送请求
+      this.getGoods();
+    },
+    getPageSizes(pageSize) {
+      //收集参数
+      this.searchParams.pageSize = pageSize;
+      //当前页码归1
+      this.searchParams.pageNo = 1;
+      //再次发请求
       this.getGoods();
     },
   },
