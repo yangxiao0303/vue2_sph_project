@@ -115,7 +115,8 @@
             </ul>
           </div>
           <div class="fr page">
-            paginationpaginationpaginationpaginationpaginationpagination
+            <Pagination>
+            </Pagination>
           </div>
         </div>
       </div>
@@ -174,9 +175,6 @@ export default {
     }),
     isOne() {
       return this.searchParams.order.includes("1");
-    },
-    isTwo() {
-      return this.searchParams.order.includes("2");
     },
     isDesc() {
       return this.searchParams.order.includes("desc");

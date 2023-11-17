@@ -2,6 +2,7 @@
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 import TypeNav from "@/components/typenav";
+import Pagination from "@/components/pagination";
 // 放置全局组件
 // Vue.component("Header",Header);
 // Vue.component("Footer",Footer);
@@ -10,7 +11,8 @@ import TypeNav from "@/components/typenav";
 const globalObj = {
   Header,
   Footer,
-  TypeNav
+  TypeNav,
+  Pagination,
 }
 
 // 自定义插件对象
