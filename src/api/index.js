@@ -9,3 +9,5 @@ export const reqBanner = ()=> mockRequest({url:'/banner'});
 export const reqFloor = ()=> mockRequest({url:'/floor'});
 // search 页面 搜索请求的结果数据(携带数据最多为 10个 key 组成的对象)
 export const reqGoodsList = (keysObj)=> request({url:'/list',method:'POST',data:keysObj});
+// detail 页面 商品详情返回数据
+export const reDeatil = (MerchandiseId) => request({url:`/item/${MerchandiseId}`});
