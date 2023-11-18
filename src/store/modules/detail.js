@@ -29,7 +29,11 @@ export default {
     },
     spuSaleAttrList(state){
       return state.goodsDetail.spuSaleAttrList || [];
+    },
+    skuImageList(state){
+      return (state.goodsDetail.skuInfo || {}).skuImageList || [];
     }
+
   },
   // 存储 下级模块
   mudules: {},
