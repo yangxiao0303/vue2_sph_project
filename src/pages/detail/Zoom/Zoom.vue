@@ -1,9 +1,9 @@
 <template>
   <div class="spec-preview">
-    <img :src="(skuImageList[0] || {}).imgUrl" />
+    <img :src="(skuImageList[index] || {}).imgUrl" />
     <div class="event" @mousemove="handlePosition"></div>
-    <div class="big" >
-      <img :src="(skuImageList[0] || {}).imgUrl" ref="big"/>
+    <div class="big">
+      <img :src="(skuImageList[index] || {}).imgUrl" ref="big" />
     </div>
     <div class="mask" ref="mask"></div>
   </div>
@@ -13,6 +13,18 @@
 import { mapGetters } from "vuex";
 export default {
   name: "Zoom",
+  data() {
+    return {
+      index: 0,
+    };
+    
+  },
+  // 组件挂载完成时执行一次
+  mounted() {
+      this.$bus.$on("sendIndex",(index)=>{
+        this.index = index;
+      })
+    },
   methods: {
     handlePosition(event) {
       // 获取元素
@@ -24,14 +36,10 @@ export default {
       // 设置边界值
       // 横坐标
       x < 0 ? (x = 0) : x;
-      x > mask.offsetWidth
-        ? (x = mask.offsetWidth)
-        : x;
+      x > mask.offsetWidth ? (x = mask.offsetWidth) : x;
       // 纵坐标
       y < 0 ? (y = 0) : y;
-      y > mask.offsetHeight
-        ? (y = mask.offsetWidth)
-        : y;
+      y > mask.offsetHeight ? (y = mask.offsetWidth) : y;
       // 蒙板位置赋值
       mask.style.top = y + "px";
       mask.style.left = x + "px";
