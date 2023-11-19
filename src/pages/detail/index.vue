@@ -27,7 +27,8 @@
               {{ skuInfo.skuName }}
             </h3>
             <p class="news">
-              {{ skuInfo.skuDesc }} </p>
+              {{ skuInfo.skuDesc }}
+            </p>
             <div class="priceArea">
               <div class="priceArea1">
                 <div class="title">
@@ -49,7 +50,9 @@
                 </div>
                 <div class="fixWidth">
                   <i class="red-bg">加价购</i>
-                  <em class="t-gray">满999.00另加20.00元，或满1999.00另加30.00元，或满2999.00另加40.00元，即可在购物车换购热销商品</em>
+                  <em class="t-gray"
+                    >满999.00另加20.00元，或满1999.00另加30.00元，或满2999.00另加40.00元，即可在购物车换购热销商品</em
+                  >
                 </div>
               </div>
             </div>
@@ -73,16 +76,33 @@
           <div class="choose">
             <div class="chooseArea">
               <div class="choosed"></div>
-              <dl v-for="(attr,index) in spuSaleAttrList" :key = "attr.Id">
-                <dt class="title">{{attr.saleAttrName}}</dt>
-                <dd changepirce="0" :class="{active: attrValue.isChecked === '1'}" v-for="attrValue in attr.spuSaleAttrValueList ">{{attrValue.saleAttrValueName}}</dd>
+              <!-- 销售属性 -->
+              <dl v-for="(attr, index) in spuSaleAttrList" :key="attr.Id">
+                <dt class="title">{{ attr.saleAttrName }}</dt>
+                <dd @click="
+                    changeChecked(
+                      attr.spuSaleAttrValueList,
+                      attrValue
+                    )
+                  "
+                  changepirce="0"
+                  :class="{ active: attrValue.isChecked === '1' }"
+                  v-for="attrValue in attr.spuSaleAttrValueList" :key="attrValue.id"
+                >
+                  {{ attrValue.saleAttrValueName }}
+                </dd>
               </dl>
             </div>
             <div class="cartWrap">
               <div class="controls">
-                <input autocomplete="off" class="itxt" />
-                <a href="javascript:" class="plus">+</a>
-                <a href="javascript:" class="mins">-</a>
+                <input autocomplete="off" class="itxt" v-model="skuNum" />
+                <a href="javascript:" class="plus" @click="skuNum++">+</a>
+                <a
+                  href="javascript:"
+                  class="mins"
+                  @click="skuNum > 1 ? skuNum -- : (skuNum = 1)"
+                  >-</a
+                >
               </div>
               <div class="add">
                 <a href="javascript:">加入购物车</a>
@@ -331,11 +351,16 @@ import { mapState } from "vuex";
 
 export default {
   name: "Detail",
+  data() {
+    return {
+      // 默认物品数量
+      skuNum: 1,
+    };
+  },
   // 组件完成挂载阶段
   mounted() {
     // 派发动作 拿到数据
     this.$store.dispatch("getGoodsDetail", this.$route.params.skuId);
-
   },
   components: {
     ImageList,
@@ -344,8 +369,20 @@ export default {
   computed: {
     ...mapGetters(["categoryView", "skuInfo", "spuSaleAttrList"]),
     ...mapState({
-      goodsDetail: state => state.detail.goodsDetail,
+      goodsDetail: (state) => state.detail.goodsDetail,
     }),
+  },
+  methods: {
+    // 点击不同属性
+    // valueList: 所有属性
+    // currentValue: 当前点击属性
+    changeChecked(valueList,currentValue){
+      // 排他思想,先都变成灭了的
+      valueList.forEach(item => {
+        item.isChecked = "0";
+      });
+      currentValue.isChecked = "1";
+    }
   },
 };
 </script>
@@ -359,7 +396,7 @@ export default {
     .conPoin {
       padding: 9px 15px 9px 0;
 
-      &>span+span:before {
+      & > span + span:before {
         content: "/\00a0";
         padding: 0 5px;
         color: #ccc;
@@ -624,7 +661,7 @@ export default {
             }
 
             .goodsList {
-              &>li {
+              & > li {
                 margin: 5px 0 15px;
                 border-bottom: 1px solid #ededed;
                 padding-bottom: 5px;
@@ -789,7 +826,7 @@ export default {
           li {
             float: left;
 
-            &+li>a {
+            & + li > a {
               border-left: 1px solid #ddd;
             }
 

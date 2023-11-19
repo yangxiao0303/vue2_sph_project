@@ -22,12 +22,10 @@ export default {
       state.category = category;
     },
     GETBANNER(state, banner){
-      state.banner = banner;
-      console.log(state.banner);
+      state.banner = banner;;
     },
     GETFLOOR(state, floor){
       state.floor = floor;
-      console.log(state.floor);
     }
   },
   // 存储状态
