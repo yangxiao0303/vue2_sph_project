@@ -1,4 +1,4 @@
-import { reqUserCart } from "@/api";
+import { reqChangeChecked, reqUserCart } from "@/api";
 
 export default {
   // 进行异步操作发送请求/业务逻辑
@@ -7,6 +7,17 @@ export default {
     async getUserCart({ commit, dispatch, state, getters }) {
       const result = await reqUserCart();
       commit("GETUSERCART", result.data);
+    },
+    async changeChecked(
+      { commit, dispatch, state, getters },
+      { skuId, isChecked }
+    ) {
+      const result = await reqChangeChecked(skuId, isChecked);
+      if (result.code === 200) {
+        return "ok";
+      } else {
+        return Promise.reject(new Error(result.message));
+      }
     },
   },
   // 用纯函数进行状态更改

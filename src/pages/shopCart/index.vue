@@ -17,7 +17,12 @@
         <!-- 每一个UL即为一个商品 -->
         <ul class="cart-list" v-for="item in cartInfoList" :key="item.skuId">
           <li class="cart-list-con1">
-            <input type="checkbox" name="chk_list" :checked="item.isChecked" />
+            <input
+              type="checkbox"
+              name="chk_list"
+              :checked="item.isChecked"
+              @change="changeChecked(item.skuId, $event.target.checked)"
+            />
           </li>
           <li class="cart-list-con2">
             <img :src="item.imgUrl" />
@@ -90,6 +95,30 @@ export default {
     getUserCart() {
       //派发action获取用户的购物车数据
       this.$store.dispatch("getUserCart");
+    },
+    async changeChecked(skuId, isChecked) {
+      // 给vuex的action派发动作
+      try {
+        // 等待后端返回更改是否成功的数据
+        await this.$store.dispatch("changeChecked", {
+          skuId, // 点击的商品的Id
+          isChecked: Number(isChecked),// 是否被勾选的值
+        });
+        // 更改成功后, 从后端拿数据
+        this.getUserCart();
+        // 使用element-UI展示修改成功
+        this.$message({
+          message:"更新成功",
+          type: "success"
+        });
+        // 捕获抛出的错误
+      } catch (error) {
+        // 提示
+        this.$message({
+          message:"更新失败",
+          type: "error"
+        });
+      }
     },
   },
   computed: {

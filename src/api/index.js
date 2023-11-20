@@ -16,3 +16,5 @@ export const reDeatil = (MerchandiseId) => request({url:`/item/${MerchandiseId}`
 export const reqAddOrUpdateCart = (skuId,skuNum) => request({url: `/cart/addToCart/${skuId}/${skuNum}`, method: 'POST'});
 // 获取用户购物车数据
 export const reqUserCart = () => request({url:'/cart/cartList'})
+// 更新购物车商品选中状态
+export const reqChangeChecked = (skuId,isChecked) => request({url:`/cart/checkCart/${skuId}/${isChecked}`});
