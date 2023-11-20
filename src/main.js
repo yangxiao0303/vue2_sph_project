@@ -6,6 +6,12 @@ import App from './App.vue'
 import { Swiper,SwiperSlide } from 'vue-awesome-swiper'
 // 引入 Swiper,SwiperSlide 样式
 import "swiper/css/swiper.min.css"
+// 引入 element-UI组件库
+import ElementUI from 'element-ui'
+// 引入 element-UI样式
+import 'element-ui/lib/theme-chalk/index.css';
+// 安装 elemen-UI
+Vue.use(ElementUI);
 // 放置 轮播图组件
 Vue.component("Swiper",Swiper);
 Vue.component("SwiperSlide",SwiperSlide);

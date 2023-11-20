@@ -410,17 +410,25 @@ export default {
           skuId: this.$route.params.skuId,
           skuNum: this.skuNum,
         });
+        // 会话存储,存储商品详情的数据
+        sessionStorage.setItem('GOODS',JSON.stringify(this.skuInfo));
         //跳转到成功页面
         this.$router.push({
           name: "addcartsuccess",
           params: { skuNum: this.skuNum },
         });
         // 加入购物车成功
-        alert("加入购物车成功");
+        this.$message({
+          message: '加入购物车成功',
+          type:'success'
+        })
         // 如果返回一个失败的promise
       } catch (error) {
         // 加入购物车失败
-        alert("加入购物车失败");
+        this.$message({
+          message: error.message,
+          type: 'error',
+        })
       }
     },
   },
