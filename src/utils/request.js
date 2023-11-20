@@ -3,6 +3,7 @@ import axios from "axios";
 // 引入 nprogress 实现请求的进度条加载
 import nprogress from "nprogress";
 import "nprogress/nprogress.css";
+import GetUserTempId from "./userId";
 // 配置加载小球的隐藏
 nprogress.configure({ showSpinner: false});
 // 创建新的axios请求
@@ -17,6 +18,9 @@ request.interceptors.request.use((config) => {
   nprogress.start();
   // 可以携带公共参数 (token...)
   // config.headers.token = 654641321352165
+  
+  // 配置公共参数,在header下携带公共参数, 临时Id
+  config.headers.userTempId = GetUserTempId();
   // 要返回配置对象
   return config;
 });

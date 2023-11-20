@@ -5,6 +5,7 @@ import Login from "@/pages/login";
 import Register from "@/pages/register";
 import Detail from "@/pages/detail";
 import AddCartSuccess from "@/pages/addCartSuccess";
+import ShopCart from "@/pages/shopCart";
 
 // 设置并暴露路由规则
 export default [

@@ -15,4 +15,4 @@ export const reDeatil = (MerchandiseId) => request({url:`/item/${MerchandiseId}`
 // 参1: 商品ID 参2: 商品数量
 export const reqAddOrUpdateCart = (skuId,skuNum) => request({url: `/cart/addToCart/${skuId}/${skuNum}`, method: 'POST'});
 // 获取用户购物车数据
-export const reqUserCart = () => request({url:'/cart/carList'})
+export const reqUserCart = () => request({url:'/cart/cartList'})
