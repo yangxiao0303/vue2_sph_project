@@ -95,7 +95,7 @@
             </div>
             <div class="cartWrap">
               <div class="controls">
-                <input autocomplete="off" class="itxt" v-model="skuNum" />
+                <input autocomplete="off" class="itxt" v-model="skuNum" @change="changeSkuNum"/>
                 <a href="javascript:" class="plus" @click="skuNum++">+</a>
                 <a
                   href="javascript:"
@@ -382,7 +382,23 @@ export default {
         item.isChecked = "0";
       });
       currentValue.isChecked = "1";
-    }
+    },
+    changeSkuNum(event){
+      // 获取用户的输入内容
+      const inputValue = event.target.value *1;
+      // 如果输入的非纯数字,或比 1 小
+      if(isNaN(inputValue)||inputValue <1){
+        // 截取整数部分 1aaa3 -> 1
+        this.skuNum = parseInt(event.target.value);
+        // aaadf1 -> 1
+        if(isNaN(this.skuNum)) {
+          this.skuNum = 1;
+        }
+      } else {
+        // 合法情况
+        this.skuNum = Math.ceil(event.target.value);
+      }
+     },
   },
 };
 </script>
