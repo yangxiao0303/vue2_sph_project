@@ -21,7 +21,7 @@
               type="checkbox"
               name="chk_list"
               :checked="item.isChecked"
-              @change="changeChecked(item.skuId, $event.target.checked)"
+              @change="changeChecked(item, $event.target.checked)"
             />
           </li>
           <li class="cart-list-con2">
@@ -34,15 +34,18 @@
             <span class="price">{{ item.skuPrice }}</span>
           </li>
           <li class="cart-list-con5">
-            <a href="javascript:void(0)" class="mins">-</a>
+            <a href="javascript:void(0)" class="mins" @click="minusCart(item)"
+              >-</a
+            >
             <input
               autocomplete="off"
               type="text"
               :value="item.skuNum"
               minnum="1"
               class="itxt"
+              @change="changeNumber(item, $event.target.value)"
             />
-            <a href="javascript:void(0)" class="plus">+</a>
+            <a href="javascript:void(0)" class="plus" @click="addCart(item)">+</a>
           </li>
           <li class="cart-list-con6">
             <span class="sum">{{ item.skuPrice * item.skuNum }}</span>
@@ -83,6 +86,7 @@
 </template>
 
 <script>
+import throttle from 'lodash/throttle'; // 按需引入
 import { mapGetters } from "vuex";
 export default {
   name: "ShopCart",
@@ -96,31 +100,119 @@ export default {
       //派发action获取用户的购物车数据
       this.$store.dispatch("getUserCart");
     },
+    // 改变选中状态的回调
     async changeChecked(skuId, isChecked) {
       // 给vuex的action派发动作
       try {
         // 等待后端返回更改是否成功的数据
         await this.$store.dispatch("changeChecked", {
           skuId, // 点击的商品的Id
-          isChecked: Number(isChecked),// 是否被勾选的值
+          isChecked: Number(isChecked), // 是否被勾选的值
         });
         // 更改成功后, 从后端拿数据
         this.getUserCart();
         // 使用element-UI展示修改成功
         this.$message({
-          message:"更新成功",
-          type: "success"
+          message: "更新成功",
+          type: "success",
         });
         // 捕获抛出的错误
       } catch (error) {
         // 提示
         this.$message({
-          message:"更新失败",
-          type: "error"
+          message: "更新失败",
+          type: "error",
         });
       }
     },
+    // 减少商品数量
+    minusCart:throttle(async function (item) {
+      if (item.skuNum > 1) {
+        // 商品ID
+        const skuId = item.skuId;
+        // 商品数量变化
+        const skuNum = -1;
+        try {
+          // 给 vuex 派发更新数量的请求
+          await this.$store.dispatch("updateNumber", { skuId, skuNum });
+          // 等待异步函数执行成功,更新数量
+          this.getUserCart();
+          // 提示消息
+          this.$message({
+            message: "更新成功",
+            type: "success",
+          });
+        } catch (error) {
+          // 提示信息
+          this.$message({
+            message: "更新失败",
+            type: "error",
+          });
+        }
+      }
+    }, 1000),
+    // 修改商品数量的回调
+    changeNumber(item, input) {
+      // 数量变化差值
+      let skuNum;
+      // 判断数据是否合法
+      const inputValue = input *1
+      // 如果不合法
+      if (isNaN(inputValue) || inputValue < 1) {
+        // 赋值为0
+        skuNum = 0;
+        // 如果合法
+      } else {
+        skuNum = Math.ceil(inputValue) - item.skuNum;
+      }
+      this.$store.dispatch("updateNumber", { skuId: item.skuId, skuNum }).then(
+        (res) => {
+          // 等待异步函数执行成功,更新数量
+          this.getUserCart();
+          // 提示消息
+          this.$message({
+            message: "更新成功",
+            type: "success",
+          });
+        },
+        (error) => {
+          // 提示信息
+          this.$message({
+            message: "更新失败",
+            type: "error",
+          });
+        }
+      );
+    },
+    // 增加商品数量
+    async addCart(goods) {
+        //准备参数
+        //发请求(修改数量)
+        //成功再次获取最新购物车数据
+        //失败提示信息
+        const skuId = goods.skuId;
+        const skuNum = 1;
+        //通知vuex发请求更新数量
+        try {
+          // 给 vuex 派发更新数量的请求
+          await this.$store.dispatch("updateNumber", { skuId, skuNum });
+          // 等待异步函数执行成功,更新数量
+          this.getUserCart();
+          // 提示消息
+          this.$message({
+            message: "更新成功",
+            type: "success",
+          });
+        } catch (error) {
+          // 提示信息
+          this.$message({
+            message: "更新失败",
+            type: "error",
+          });
+        }
+      },
   },
+
   computed: {
     // 使用辅助函数获取 getters 中的数据
     ...mapGetters(["cartInfoList"]),

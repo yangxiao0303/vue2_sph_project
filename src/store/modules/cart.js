@@ -1,4 +1,4 @@
-import { reqChangeChecked, reqUserCart } from "@/api";
+import { reqAddOrUpdateCart, reqChangeChecked, reqUserCart } from "@/api";
 
 export default {
   // 进行异步操作发送请求/业务逻辑
@@ -8,11 +8,24 @@ export default {
       const result = await reqUserCart();
       commit("GETUSERCART", result.data);
     },
+    // 改变商品点击状态
     async changeChecked(
       { commit, dispatch, state, getters },
       { skuId, isChecked }
     ) {
       const result = await reqChangeChecked(skuId, isChecked);
+      if (result.code === 200) {
+        return "ok";
+      } else {
+        return Promise.reject(new Error(result.message));
+      }
+    },
+    // 改变购物车商品数量
+    async updateNumber(
+      { dispatch, commit, getters, state },
+      { skuId, skuNum }
+    ) {
+      const result = await reqAddOrUpdateCart(skuId, skuNum);
       if (result.code === 200) {
         return "ok";
       } else {
