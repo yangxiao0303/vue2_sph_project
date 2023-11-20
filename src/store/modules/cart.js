@@ -6,7 +6,6 @@ export default {
     // 获取用户的购物车数据
     async getUserCart({ commit, dispatch, state, getters }) {
       const result = await reqUserCart();
-      console.log(result);
       commit("GETUSERCART", result.data);
     },
   },
@@ -25,7 +24,7 @@ export default {
   getters: {
     // 简化需要使用的购物车数据
     cartInfoList(state) {
-      return state.cart[0] || {}.cartInfoList || [];
+      return (state.cart[0] || {}).cartInfoList || [];
     },
   },
   // 模块化仓库
