@@ -79,15 +79,12 @@
               <!-- 销售属性 -->
               <dl v-for="(attr, index) in spuSaleAttrList" :key="attr.Id">
                 <dt class="title">{{ attr.saleAttrName }}</dt>
-                <dd @click="
-                    changeChecked(
-                      attr.spuSaleAttrValueList,
-                      attrValue
-                    )
-                  "
+                <dd
+                  @click="changeChecked(attr.spuSaleAttrValueList, attrValue)"
                   changepirce="0"
                   :class="{ active: attrValue.isChecked === '1' }"
-                  v-for="attrValue in attr.spuSaleAttrValueList" :key="attrValue.id"
+                  v-for="attrValue in attr.spuSaleAttrValueList"
+                  :key="attrValue.id"
                 >
                   {{ attrValue.saleAttrValueName }}
                 </dd>
@@ -95,17 +92,22 @@
             </div>
             <div class="cartWrap">
               <div class="controls">
-                <input autocomplete="off" class="itxt" v-model="skuNum" @change="changeSkuNum"/>
+                <input
+                  autocomplete="off"
+                  class="itxt"
+                  v-model="skuNum"
+                  @change="changeSkuNum"
+                />
                 <a href="javascript:" class="plus" @click="skuNum++">+</a>
                 <a
                   href="javascript:"
                   class="mins"
-                  @click="skuNum > 1 ? skuNum -- : (skuNum = 1)"
+                  @click="skuNum > 1 ? skuNum-- : (skuNum = 1)"
                   >-</a
                 >
               </div>
               <div class="add">
-                <a href="javascript:">加入购物车</a>
+                <a href="javascript:" @click="addCart">加入购物车</a>
               </div>
             </div>
           </div>
@@ -376,29 +378,51 @@ export default {
     // 点击不同属性
     // valueList: 所有属性
     // currentValue: 当前点击属性
-    changeChecked(valueList,currentValue){
+    changeChecked(valueList, currentValue) {
       // 排他思想,先都变成灭了的
-      valueList.forEach(item => {
+      valueList.forEach((item) => {
         item.isChecked = "0";
       });
       currentValue.isChecked = "1";
     },
-    changeSkuNum(event){
+    changeSkuNum(event) {
       // 获取用户的输入内容
-      const inputValue = event.target.value *1;
+      const inputValue = event.target.value * 1;
       // 如果输入的非纯数字,或比 1 小
-      if(isNaN(inputValue)||inputValue <1){
+      if (isNaN(inputValue) || inputValue < 1) {
         // 截取整数部分 1aaa3 -> 1
         this.skuNum = parseInt(event.target.value);
         // aaadf1 -> 1
-        if(isNaN(this.skuNum)) {
+        if (isNaN(this.skuNum)) {
           this.skuNum = 1;
         }
       } else {
         // 合法情况
         this.skuNum = Math.ceil(event.target.value);
       }
-     },
+    },
+    //  点击加入购物车的回调
+    async addCart() {
+      try {
+        // 派发动作的过程相当于 仓库的actions对象中的addCart方法的调用部分
+        // 携带两个参数: 参1: 商品ID, 参2: 商品数量
+        await this.$store.dispatch("addCart", {
+          skuId: this.$route.params.skuId,
+          skuNum: this.skuNum,
+        });
+        //跳转到成功页面
+        this.$router.push({
+          name: "addcartsuccess",
+          params: { skuNum: this.skuNum },
+        });
+        // 加入购物车成功
+        alert("加入购物车成功");
+        // 如果返回一个失败的promise
+      } catch (error) {
+        // 加入购物车失败
+        alert("加入购物车失败");
+      }
+    },
   },
 };
 </script>
