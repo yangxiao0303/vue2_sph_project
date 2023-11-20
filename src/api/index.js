@@ -14,3 +14,5 @@ export const reDeatil = (MerchandiseId) => request({url:`/item/${MerchandiseId}`
 // 把商品加入购物车/修改购物车商品的数量
 // 参1: 商品ID 参2: 商品数量
 export const reqAddOrUpdateCart = (skuId,skuNum) => request({url: `/cart/addToCart/${skuId}/${skuNum}`, method: 'POST'});
+// 获取用户购物车数据
+export const reqUserCart = () => request({url:'/cart/carList'})

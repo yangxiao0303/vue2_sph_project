@@ -54,6 +54,14 @@ export default [
     },
   },
   {
+    name: "shopcart",
+    path: "/shopcart",
+    component: ShopCart,
+    meta: {
+      isActive: true,
+    },
+  },
+  {
     path: "/",
     redirect: "/home",
   },
