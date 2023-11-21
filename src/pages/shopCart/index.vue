@@ -244,7 +244,7 @@ export default {
       const isChecked = Number(event.target.checked);
       try {
         // 给Vuex派发动作
-        await this.$store.dispatch("UpdateAllChecked", isChecked);
+        await this.$store.dispatch("updateAllChecked", isChecked);
         // 更新购物车
         this.getUserCart();
       } catch (error) {}
@@ -272,6 +272,10 @@ export default {
         return prev;
       }, 0);
     },
+    //判断全选勾不勾
+    isChecked() {
+        return this.cartInfoList.every((goods) => goods.isChecked == "1");
+      },
   },
 };
 </script>
