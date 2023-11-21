@@ -20,3 +20,5 @@ export const reqUserCart = () => request({url:'/cart/cartList'})
 export const reqChangeChecked = (skuId,isChecked) => request({url:`/cart/checkCart/${skuId}/${isChecked}`});
 // 删除购物车物品
 export const reqDeleteGoods = (skuId) => request({url:`/cart/deleteCart/${skuId}`,method: "DELETE"});
+// 获取验证码
+export const reqUserCode = (phone) => request({url:`/user/passport/sendCode/${phone}`});
