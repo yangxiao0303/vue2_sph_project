@@ -24,3 +24,5 @@ export const reqDeleteGoods = (skuId) => request({url:`/cart/deleteCart/${skuId}
 export const reqUserCode = (phone) => request({url:`/user/passport/sendCode/${phone}`});
 // 新用户注册的接口
 export const reqUserRegister = (data) => request({url:`/user/passport/register`,method: "POST",data});
+// 用户登陆的接口
+export const reqUserLogin = (data) => request({url:'/user/passport/login',method:"POST",data}); 
