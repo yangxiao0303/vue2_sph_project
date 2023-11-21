@@ -30,22 +30,26 @@
       <!-- 登录密码 -->
       <div class="content">
         <label>登录密码:</label>
-        <input type="text" placeholder="请输入你的登录密码" />
+        <input
+          type="text"
+          placeholder="请输入你的登录密码"
+          v-model="password"
+        />
         <span class="error-msg">错误提示信息</span>
       </div>
       <!-- 确认密码 -->
       <div class="content">
         <label>确认密码:</label>
-        <input type="text" placeholder="请输入确认密码" />
+        <input type="text" placeholder="请输入确认密码" v-model="password1" />
         <span class="error-msg">错误提示信息</span>
       </div>
       <div class="controls">
-        <input name="m1" type="checkbox" />
+        <input name="m1" type="checkbox" :checked="isAgree" />
         <span>同意协议并注册《尚品汇用户协议》</span>
         <span class="error-msg">错误提示信息</span>
       </div>
       <div class="btn">
-        <button>完成注册</button>
+        <button @click="register">完成注册</button>
       </div>
     </div>
 
@@ -72,12 +76,21 @@ export default {
   name: "Register",
   data() {
     return {
+      // 手机号/账号
       phone: "",
+      // 验证码
       code: "",
+      // 密码
+      password: "",
+      // 确认密码
+      password1: "",
+      // 同意用户协议
+      isAgree: true,
     };
   },
   methods: {
     async getCode() {
+      console.log(this.$store);
       try {
         // 解构 phone
         const { phone } = this;
@@ -89,6 +102,26 @@ export default {
           this.code = this.$store.state.user.code;
         }
       } catch (error) {}
+    },
+    register() {
+      // 解构需要的数据
+      const { phone, password, password1, code, isAgree } = this;
+      // 简单数据校验
+      if (phone.trim() && password === password1) {
+        this.$store.dispatch("userRegister", { phone, password, code }).then(
+          () => {
+            // 如果注册成功--> 跳转至登陆页面
+            this.$router.push({ path: "/login" });
+          },
+          (error) => {
+            // 如果注册失败--> 提示错误信息
+            this.$message({
+              message: error.message,
+              type: "error",
+            })
+          }
+        );
+      }
     },
   },
 };

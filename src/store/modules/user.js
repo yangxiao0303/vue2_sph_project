@@ -1,7 +1,8 @@
-import { reqUserCode } from "@/api";
+import { reqUserCode, reqUserRegister } from "@/api";
 export default {
   // 进行异步操作发送请求/业务逻辑
   actions: {
+    // 注册页面获取验证码
     async getCode({commit,dispatch,state,getters},phone){
       // 发送请求,获取验证码
       const result = await reqUserCode(phone);
@@ -14,6 +15,15 @@ export default {
         return 'ok';
         // 失败, 返回一个失败状态的 promise 对象
       } else return Promise.reject(new Error(result.message));
+    },
+    // 注册页面-注册新用户
+    async userRegister({dispatch,commit,state,getters},data){
+      // 发送请求,接收返回值
+      const result = await reqUserRegister(data);
+      // 如果注册成功 --> 返回一个 成功状态的promise
+      if(result.code === 200) return "ok";
+      // 不成功 --> 返回一个失败状态的 promise
+      else return Promise.reject(new Error(result.message));
     }
   },
   // 用纯函数进行状态更改

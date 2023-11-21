@@ -22,3 +22,5 @@ export const reqChangeChecked = (skuId,isChecked) => request({url:`/cart/checkCa
 export const reqDeleteGoods = (skuId) => request({url:`/cart/deleteCart/${skuId}`,method: "DELETE"});
 // 获取验证码
 export const reqUserCode = (phone) => request({url:`/user/passport/sendCode/${phone}`});
+// 新用户注册的接口
+export const reqUserRegister = (data) => request({url:`/user/passport/register`,method: "POST",data});
