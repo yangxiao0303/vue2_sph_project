@@ -43,24 +43,36 @@
               :value="item.skuNum"
               minnum="1"
               class="itxt"
-              @change="changeNumber(item, $event.target.value)"
+              @input="changeNumber(item, $event.target.value)"
             />
-            <a href="javascript:void(0)" class="plus" @click="addCart(item)">+</a>
+            <a href="javascript:void(0)" class="plus" @click="addCart(item)"
+              >+</a
+            >
           </li>
           <li class="cart-list-con6">
             <span class="sum">{{ item.skuPrice * item.skuNum }}</span>
           </li>
           <li class="cart-list-con7">
-            <a href="#none" class="sindelet">删除</a>
-            <br />
-            <a href="#none">移到收藏</a>
+            <el-popconfirm
+              :title="`你确定要删除${item.skuName}?`"
+              @confirm="deleteGoods(item.skuId)"
+            >
+              <el-button type="danger" size="mini" slot="reference"
+                >删除</el-button
+              >
+            </el-popconfirm>
           </li>
         </ul>
       </div>
     </div>
     <div class="cart-tool">
       <div class="select-all">
-        <input class="chooseAll" type="checkbox" />
+        <input
+          class="chooseAll"
+          type="checkbox"
+          :checked="isChecked"
+          @change="updateAllChecked"
+        />
         <span>全选</span>
       </div>
       <div class="option">
@@ -86,7 +98,8 @@
 </template>
 
 <script>
-import throttle from 'lodash/throttle'; // 按需引入
+import debounce from "lodash/debounce";
+import throttle from "lodash/throttle"; // 按需引入
 import { mapGetters } from "vuex";
 export default {
   name: "ShopCart",
@@ -126,7 +139,7 @@ export default {
       }
     },
     // 减少商品数量
-    minusCart:throttle(async function (item) {
+    minusCart: throttle(async function (item) {
       if (item.skuNum > 1) {
         // 商品ID
         const skuId = item.skuId;
@@ -152,11 +165,11 @@ export default {
       }
     }, 1000),
     // 修改商品数量的回调
-    changeNumber(item, input) {
+    changeNumber: debounce(function (item, input) {
       // 数量变化差值
       let skuNum;
       // 判断数据是否合法
-      const inputValue = input *1
+      const inputValue = input * 1;
       // 如果不合法
       if (isNaN(inputValue) || inputValue < 1) {
         // 赋值为0
@@ -183,34 +196,59 @@ export default {
           });
         }
       );
-    },
+    }, 1000),
     // 增加商品数量
     async addCart(goods) {
-        //准备参数
-        //发请求(修改数量)
-        //成功再次获取最新购物车数据
-        //失败提示信息
-        const skuId = goods.skuId;
-        const skuNum = 1;
-        //通知vuex发请求更新数量
-        try {
-          // 给 vuex 派发更新数量的请求
-          await this.$store.dispatch("updateNumber", { skuId, skuNum });
-          // 等待异步函数执行成功,更新数量
-          this.getUserCart();
-          // 提示消息
-          this.$message({
-            message: "更新成功",
-            type: "success",
-          });
-        } catch (error) {
-          // 提示信息
-          this.$message({
-            message: "更新失败",
-            type: "error",
-          });
-        }
-      },
+      //准备参数
+      //发请求(修改数量)
+      //成功再次获取最新购物车数据
+      //失败提示信息
+      const skuId = goods.skuId;
+      const skuNum = 1;
+      //通知vuex发请求更新数量
+      try {
+        // 给 vuex 派发更新数量的请求
+        await this.$store.dispatch("updateNumber", { skuId, skuNum });
+        // 等待异步函数执行成功,更新数量
+        this.getUserCart();
+        // 提示消息
+        this.$message({
+          message: "更新成功",
+          type: "success",
+        });
+      } catch (error) {
+        // 提示信息
+        this.$message({
+          message: "更新失败",
+          type: "error",
+        });
+      }
+    },
+    // 删除单个商品
+    async deleteGoods(skuId) {
+      try {
+        // 派发请求,删除购物车物品数据
+        await this.$store.dispatch("deleteGoods", skuId);
+        // 如果成功,请求最新购物车数据
+        this.getUserCart();
+        // 提示
+        this.$message({});
+      } catch (error) {
+        // 失败,提示
+        this.$message({});
+      }
+    },
+    // 更新全部选择状态
+    async updateAllChecked(event) {
+      // 将传入的值由boolean 转化为 number
+      const isChecked = Number(event.target.checked);
+      try {
+        // 给Vuex派发动作
+        await this.$store.dispatch("UpdateAllChecked", isChecked);
+        // 更新购物车
+        this.getUserCart();
+      } catch (error) {}
+    },
   },
 
   computed: {

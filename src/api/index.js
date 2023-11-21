@@ -18,3 +18,5 @@ export const reqAddOrUpdateCart = (skuId,skuNum) => request({url: `/cart/addToCa
 export const reqUserCart = () => request({url:'/cart/cartList'})
 // 更新购物车商品选中状态
 export const reqChangeChecked = (skuId,isChecked) => request({url:`/cart/checkCart/${skuId}/${isChecked}`});
+// 删除购物车物品
+export const reqDeleteGoods = (skuId) => request({url:`/cart/deleteCart/${skuId}`,method: "DELETE"});

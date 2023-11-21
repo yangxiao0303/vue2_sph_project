@@ -1,4 +1,4 @@
-import { reqAddOrUpdateCart, reqChangeChecked, reqUserCart } from "@/api";
+import { reqAddOrUpdateCart, reqChangeChecked, reqDeleteGoods, reqUserCart } from "@/api";
 
 export default {
   // 进行异步操作发送请求/业务逻辑
@@ -32,6 +32,26 @@ export default {
         return Promise.reject(new Error(result.message));
       }
     },
+    // 删除购物车物品
+    async deleteGoods({commit,dispatch,state,getters},skuId){
+      const result = await reqDeleteGoods(skuId);
+      if (result.code === 200) return "ok";
+      else return Promise.reject(new Error(result.message));
+    },
+    // 更新全部物品选中状态
+    updateAllChecked({commit,dispatch,state,getters},isChecked){
+      // 定义一个空数组,用来接收 每次更新的 promise 对象
+      const arr = [];
+      // 遍历 state 中存储的的每一个商品,并进行更新
+      getters.cartInfoList.forEach(goods => {
+        // 接收每次更新返回的promise 对象
+        const p = dispatch("changeChecked", {skuId:goods.skuId, isChecked});
+        // 存到数组中
+        arr.push(p);
+      });
+      // 返回 (如 arr 中都为成功状态,则返回成功状态)
+      return Promise.all(arr);
+    }
   },
   // 用纯函数进行状态更改
   mutations: {
