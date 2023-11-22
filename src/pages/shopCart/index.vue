@@ -76,9 +76,9 @@
         <span>全选</span>
       </div>
       <div class="option">
-        <a href="#none" @click="deleteAllChecked">删除选中的商品</a>
-        <a href="#none">移到我的关注</a>
-        <a href="#none">清除下柜商品</a>
+        <a @click="deleteAllChecked">删除选中的商品</a>
+        <a>移到我的关注</a>
+        <a>清除下柜商品</a>
       </div>
       <div class="money-box">
         <div class="chosed">

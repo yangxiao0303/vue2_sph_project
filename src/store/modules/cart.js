@@ -61,11 +61,11 @@ export default {
       // 定义一个空数组来存储每次更新的promise对象
       const arr = [];
       // 遍历购物车中所有的物品
-      state.cartInfoList.forEach((goods) => {
+      getters.cartInfoList.forEach((goods) => {
         // 筛选被选中的商品
         if (goods.isChecked) {
           // 派发删除动作,并得到是否成功的promise对象
-          const p = dispatch("deletGoods", goods.skuId);
+          const p = dispatch("deleteGoods", goods.skuId);
           // 将得到的 promise 对象 加入到数组中
           arr.push(p);
         }

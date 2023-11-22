@@ -51,8 +51,13 @@ export default {
     async userInfo({ dispatch, commit, state, getters }) {
       // 此时,在请求拦截器内会携带公共参数 token
       const result = await reqUserInfo();
+      // token 有效
       if (result.code === 200) {
         commit("USERINFO", result.data.nickName);
+        return "ok";
+        // token 失效
+      } else {
+        return Promise.reject(new Error(result.message));
       }
     },
     // header--> 用户取消登陆

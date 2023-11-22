@@ -14,6 +14,7 @@ export default [
     component: Home,
     meta: {
       isActive: true,
+      title: "主页"
     },
   },
   {
@@ -21,6 +22,7 @@ export default [
     component: Login,
     meta: {
       isActive: false,
+      title: "登陆"
     },
   },
   {
@@ -28,6 +30,7 @@ export default [
     component: Register,
     meta: {
       isActive: false,
+      title: "注册"
     },
   },
   {
@@ -36,6 +39,7 @@ export default [
     component: Search,
     meta: {
       isActive: true,
+      title: "搜索"
     },
   },
   {
@@ -44,6 +48,7 @@ export default [
     component: Detail,
     meta: {
       isActive: true,
+      title: "商品详情"
     },
   },
   {
@@ -52,6 +57,7 @@ export default [
     component: AddCartSuccess,
     meta: {
       isActive: true,
+      title: "添加成功"
     },
   },
   {
@@ -60,6 +66,7 @@ export default [
     component: ShopCart,
     meta: {
       isActive: true,
+      title: "购物车"
     },
   },
   {

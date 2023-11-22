@@ -10,11 +10,6 @@ import "swiper/css/swiper.min.css"
 import ElementUI from 'element-ui'
 // 引入 element-UI样式
 import 'element-ui/lib/theme-chalk/index.css';
-// 安装 elemen-UI
-Vue.use(ElementUI);
-// 放置 轮播图组件
-Vue.component("Swiper",Swiper);
-Vue.component("SwiperSlide",SwiperSlide);
 // 引入全局组件
 import global from '@/components/global';
 // 安装使用自定义插件
@@ -27,6 +22,13 @@ import router from '@/router'
 import store from '@/store'
 // 引入配置好的 mock 接口
 import '@/mock/mockServe'
+// 安装 elemen-UI
+Vue.use(ElementUI);
+// 放置 轮播图组件
+Vue.component("Swiper",Swiper);
+Vue.component("SwiperSlide",SwiperSlide);
+// 引入路由鉴权文件: 全局导航守卫-判断
+import "@/permission";
 // 关闭开发模式提醒
 Vue.config.productionTip = false;
 //创建vm
