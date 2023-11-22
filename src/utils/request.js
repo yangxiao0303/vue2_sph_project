@@ -4,6 +4,8 @@ import axios from "axios";
 import nprogress from "nprogress";
 import "nprogress/nprogress.css";
 import GetUserTempId from "./userId";
+// 引入 vuex 中的 token
+import store from "@/store"
 // 配置加载小球的隐藏
 nprogress.configure({ showSpinner: false});
 // 创建新的axios请求
@@ -21,6 +23,10 @@ request.interceptors.request.use((config) => {
   
   // 配置公共参数,在header下携带公共参数, 临时Id
   config.headers.userTempId = GetUserTempId();
+  // 配置公共参数,在header下携带token
+  if(store.state.user.token) {
+    config.headers.token = store.state.user.token;
+  }
   // 要返回配置对象
   return config;
 });

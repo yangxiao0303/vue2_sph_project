@@ -4,11 +4,16 @@
     <div class="top">
       <div class="container">
         <div class="loginList">
-          <p>尚品汇欢迎您！</p>
-          <p>
+          <p>尚品汇欢迎您!</p>
+          <p v-if="!nickName">
             <span>请</span>
             <router-link to="/login">登录</router-link>
             <router-link to="/register" class="register">免费注册</router-link>
+          </p>
+          <p v-else>
+            <span>{{ greeting }} </span>
+            <router-link to="">{{ nickName }}</router-link>
+            <a class="register" @click="userLogout">退出登陆</a>
           </p>
         </div>
         <div class="typeList">
@@ -52,11 +57,14 @@
 </template>
 
 <script>
+import timePeriod from "@/utils/timePeriod";
+import { mapState } from "vuex";
 export default {
   name: "Header",
   data() {
     return {
       keyword: "",
+      greeting: timePeriod(),
     };
   },
   methods: {
@@ -75,6 +83,28 @@ export default {
       // 路径跳转
       this.$router.push(locations);
     },
+    async userLogout() {
+      try {
+        // 像vuex派发动作
+        await this.$store.dispatch("userLogout");
+        // 成功登出-->提示信息
+        this.$message({
+          message: "您已成功退出登陆!",
+          type: "success",
+        });
+      } catch (error) {
+        // 退出失败-->提示信息
+        this.$message({
+          message: "退出登陆失败,请稍后再试!",
+          type: "error",
+        });
+      }
+    },
+  },
+  computed: {
+    ...mapState({
+      nickName: (state) => state.user.nickName,
+    }),
   },
 };
 </script>

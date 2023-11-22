@@ -26,3 +26,7 @@ export const reqUserCode = (phone) => request({url:`/user/passport/sendCode/${ph
 export const reqUserRegister = (data) => request({url:`/user/passport/register`,method: "POST",data});
 // 用户登陆的接口
 export const reqUserLogin = (data) => request({url:'/user/passport/login',method:"POST",data}); 
+// 获取用户信息的接口
+export const reqUserInfo = () => request({url:"/user/passport/auth/getUserInfo"});
+// 用户退出登陆接口
+export const reqUserLogout = () => request({url:"/user/passport/logout"});

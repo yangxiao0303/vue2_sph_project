@@ -75,7 +75,7 @@
 </template>
 
 <script>
-import tiemPeriod from '@/utils/timePeriod';
+import timePeriod from '@/utils/timePeriod';
 export default {
   name: "Login",
   data() {
@@ -88,17 +88,19 @@ export default {
   },
   methods: {
     // 用户登陆的回调 ---> 表单阻止默认事件
-    userLogin() {
+    async userLogin() {
       // 解构需要使用的参数
       const {phone, password} = this;
      try {
        // 发送请求
-       this.$store.dispatch("userLogin",{phone,password});
+      await this.$store.dispatch("userLogin",{phone,password});
+      // 如果登陆成功--> 获取用户信息
+      this.$store.dispatch("userInfo");
       // 如果登陆成功--> 跳转到主页面
       this.$router.push({path:"/home"});
       // 显示欢迎信息
       this.$notify({
-        message:`${tiemPeriod()}`,
+        message:`${timePeriod()}`,
         type: 'success',
       }) 
      } catch (error) {
