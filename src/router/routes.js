@@ -6,7 +6,7 @@ import Register from "@/pages/register";
 import Detail from "@/pages/detail";
 import AddCartSuccess from "@/pages/addCartSuccess";
 import ShopCart from "@/pages/shopCart";
-
+import Trade from "@/pages/trade";
 // 设置并暴露路由规则
 export default [
   {
@@ -68,6 +68,15 @@ export default [
       isActive: true,
       title: "购物车"
     },
+  },
+  {
+    name:"trade",
+    path:"/trade",
+    component:Trade,
+    meta:{
+      isActive: true,
+      title: "结算"
+    }
   },
   {
     path: "/",

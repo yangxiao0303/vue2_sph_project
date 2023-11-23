@@ -7,10 +7,12 @@ router.beforeEach(async (to, from, next) => {
   const nickName = store.state.user.nickName
   // 如果有token
   if(token){
+    console.log(to.path);
     // 有token--> 访问 login 或 register
     if(to.path === "/login" || to.path ==="/register"){
       // --> 跳转到 home 页面
-      next({path: "/home"});
+      next({path: "/"});
+      console.log(token);
       // 有token --> 去别的页面
     } else {
       // --> 有用户名
@@ -27,7 +29,9 @@ router.beforeEach(async (to, from, next) => {
             next();
             // -->请求失败(token失效)
         },(err)=>{
+          store.dispatch("userLogout");
           // 跳转到登陆页面,重新登陆
+          console.log('userinfo失败');
           next('/login');
         })
       }

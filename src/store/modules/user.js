@@ -56,9 +56,8 @@ export default {
         commit("USERINFO", result.data.nickName);
         return "ok";
         // token 失效
-      } else {
-        return Promise.reject(new Error(result.message));
-      }
+      } else return Promise.reject(new Error(result.message));
+      
     },
     // header--> 用户取消登陆
     async userLogout({ dispatch, commit, state, getters }) {
@@ -91,7 +90,7 @@ export default {
       state.token = "";
       state.nickName = "";
       // 本地存储 token 清空
-      localStorage.removItem("TOKEN");
+      localStorage.removeItem("TOKEN");
     },
   },
   // 存储状态
